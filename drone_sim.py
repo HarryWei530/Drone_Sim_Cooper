@@ -15,9 +15,9 @@ CT = 3.1582*10**-10
 Ixx = 1.395*10**-5
 Iyy = 1.436*10**-5
 Izz = 2.173*10**-5
-Kp = 10
-Ki = 1
-Kd = 1
+Kp = 1
+Ki = 0
+Kd = 0
 
 #State Space
 A = np.array([[0,0,0,0,0,0,1,0,0,0,0,0],
@@ -75,12 +75,17 @@ for row in range(0,rows):
         curplant_tf = control.tf(plant_tf.num[row][col],plant_tf.den[row][col])
         L_tf[row][col] = control.series(controller_tf,curplant_tf)
 
+G = control.feedback(L_tf[0][0],1)
 
 
+# print(controller_tf)
+# for i in range(0,tf_size):
+    # T[i], yout[i] = control.step_response(L_tf, input=i)
 
-
+#Plot step response of plant, summing up all transfer function outputs
+T, yout = control.step_response(G, input=0)
 # # PLot step response of plant, input = 0,1,2,3 steps through one motor at a time
-T, yout1 = control.step_response(plant, input=0)
+# T, yout1 = control.step_response(plant, input=0)
 # T, yout2 = control.step_response(plant, input=1)
 # T, yout3 = control.step_response(plant, input=2)
 # T, yout4 = control.step_response(plant, input=3)
@@ -92,10 +97,10 @@ T, yout1 = control.step_response(plant, input=0)
 # # print(np.shape(T))
 # # print(np.shape(yout[0,:]))
 
-# pylab.plot(T, yout[2,:], 'g', linewidth=1)
+pylab.plot(T, yout, 'g', linewidth=1)
 # # pylab.plot(T, yout[1,:], 'b', linewidth=1)
 # # pylab.plot(T, yout[2,:], 'r', linewidth=1)
-# pylab.show()
+pylab.show()
 
 
 
